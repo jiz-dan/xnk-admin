@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>XNK Gym OS -- Admin</title>
+<meta name="description" content="XNK Gym OS -- Front desk: registrasi, POS, check-in, kelas booking.">
+<meta name="theme-color" content="#0A0A0A">
+<link rel="canonical" href="https://admin.xnkproduction.web.id/">
+
+<!-- Mulai handshake DNS/TLS ke Apps Script SEKARANG, paralel sama parsing
+     halaman kecil ini -- bukan nunggu baru mulai pas <iframe> di bawah
+     ditemukan parser. -->
+<link rel="preconnect" href="https://script.google.com">
+
+<!-- Favicon -->
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" href="favicon-32.png" type="image/png" sizes="32x32">
+<link rel="icon" href="favicon-48.png" type="image/png" sizes="48x48">
+<link rel="apple-touch-icon" href="apple-touch-icon.png" sizes="180x180">
+<link rel="manifest" href="site.webmanifest">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="XNK Gym OS">
+<meta property="og:title" content="XNK Gym OS -- Admin">
+<meta property="og:description" content="Front desk: registrasi, POS, check-in, kelas booking.">
+<meta property="og:url" content="https://admin.xnkproduction.web.id/">
+<meta property="og:image" content="https://admin.xnkproduction.web.id/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="XNK Gym OS -- Admin">
+<meta name="twitter:description" content="Front desk: registrasi, POS, check-in, kelas booking.">
+<meta name="twitter:image" content="https://admin.xnkproduction.web.id/og-image.png">
+
+<style>
+  html, body { margin: 0; padding: 0; height: 100%; overflow: hidden; background: #0A0A0A; }
+  iframe { position: fixed; inset: 0; width: 100%; height: 100%; border: 0; }
+  /* z-index DI ATAS iframe -- iframe sendiri tampak buram/putih sampai
+     dokumen di dalamnya kelar dimuat (doGet Apps Script + wrapping
+     sandbox Google, memang lambat, lihat OPERATIONS.md), jadi overlay
+     ini nutupin celah itu sampai onload iframe di bawah bener-bener
+     nembak. */
+  #wrapLoading {
+    position: fixed; inset: 0; z-index: 2; display: flex; align-items: center; justify-content: center;
+    background: #0A0A0A; color: rgba(255,255,255,0.55); font-size: 13px; font-weight: 600;
+  }
+  #wrapLoading .spinner {
+    width: 22px; height: 22px; margin-right: 10px; border-radius: 50%;
+    border: 3px solid rgba(255,255,255,0.15); border-top-color: rgba(255,255,255,0.65);
+    animation: wrapSpin 0.8s linear infinite;
+  }
+  @keyframes wrapSpin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+<!-- ?view=admin -- Admin.html (GAS) sendiri yang tampilkan login (lock
+     overlay #xnkLoginLock, dibuka lewat google.script.run, NOL
+     navigasi), bukan halaman login terpisah. Itu sebabnya address bar
+     tidak pindah: tidak ada form-POST/target sama sekali di jalur ini.
+
+     ?renew=<id> -- Owner ("Perpanjang") bisa mendarat DI SINI dengan
+     param ini di URL HALAMAN INI (window.open ke domain admin ini,
+     lihat goToRenewal()/ADMIN_URL_, ScriptStaff.html). Query string
+     GitHub Pages TIDAK otomatis diteruskan ke src iframe -- script kecil
+     di bawah yang membaca location.search halaman ini sendiri dan
+     menambahkannya ke src iframe SEBELUM iframe dimuat. -->
+<div id="wrapLoading"><div class="spinner"></div>Memuat...</div>
+<iframe
+  id="gasFrame"
+  allow="clipboard-write"
+  title="XNK Gym OS -- Admin"
+  onload="document.getElementById('wrapLoading').style.display='none'"
+></iframe>
+<script>
+  var src = "https://script.google.com/macros/s/AKfycbyPsGZUY8C7uplUdOzQ7ejxpRlMeojonuG0FwJnJTlJa8gBUUDCQqzL7QGdeeUwN2cSag/exec?view=admin";
+  var renew = new URLSearchParams(location.search).get('renew');
+  if (renew) src += "&renew=" + encodeURIComponent(renew);
+  document.getElementById('gasFrame').src = src;
+</script>
+</body>
+</html>
